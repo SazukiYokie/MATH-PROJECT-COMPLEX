@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ដំណោះស្រាយរូបវិទ្យាពេញលេញ - ទ្រឹស្ដីស៊ីនេទិចនៃឧស្ម័ន</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- MathJax for rendering LaTeX formulas -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1d4ed8;
+            --secondary: #3b82f6;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --alert-bg: #fef2f2;
+            --alert-border: #ef4444;
+            --note-bg: #fffbeb;
+            --note-border: #f59e0b;
+        }
+        body {
+            font-family: 'Kantumruy Pro', sans-serif; background-color: var(--bg); color: var(--text);
+            line-height: 1.6; margin: 0; padding: 20px;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        
+        /* Header & Controls */
+        .header { text-align: center; padding: 20px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border-radius: 12px; margin-bottom: 20px; }
+        .controls { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
+        button { padding: 10px 20px; font-family: 'Kantumruy Pro'; font-weight: bold; cursor: pointer; border: none; border-radius: 6px; background-color: var(--primary); color: white; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        button:hover { background-color: #1e40af; }
+        .btn-print { background-color: #10b981; }
+        .btn-print:hover { background-color: #059669; }
+        
+        h2.section-title { background: var(--text); color: white; padding: 10px 20px; border-radius: 6px; margin-top: 40px; }
+        
+        /* Alerts & Notes */
+        .alert { background: var(--alert-bg); border-left: 5px solid var(--alert-border); padding: 15px; margin-bottom: 20px; border-radius: 0 8px 8px 0; }
+        .note { background: var(--note-bg); border-left: 5px solid var(--note-border); padding: 10px 15px; margin: 10px 0; font-size: 0.9em; border-radius: 0 8px 8px 0; }
+        
+        /* Content Styling */
+        .qcm-list { list-style-type: decimal; padding-left: 20px; }
+        .qcm-item { background: var(--card); padding: 15px; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .ans { color: var(--primary); font-weight: bold; margin-top: 5px; display: inline-block; }
+        
+        details { background: var(--card); border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 4px solid var(--primary); }
+        summary { font-weight: bold; padding: 15px; cursor: pointer; background: #f1f5f9; border-radius: 8px; list-style: none; display: flex; justify-content: space-between; }
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: '▼'; color: var(--primary); transition: 0.3s; }
+        details[open] summary::after { transform: rotate(180deg); }
+        .content { padding: 15px; border-top: 1px solid #e2e8f0; }
+        
+        .math-block { background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin: 10px 0; overflow-x: auto; }
+        .final { background: #1e293b; color: white; padding: 10px; text-align: center; border-radius: 6px; font-weight: bold; }
+        
+        @media print {
+            body { background: white; padding: 0; }
+            .controls { display: none; }
+            details { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+            summary::after { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1 style="margin: 0; font-size: 1.8em;">ឯកសារស្វ័យសិក្សា៖ រូបវិទ្យាថ្នាក់ទី១២ (លម្អិត ១០០%)</h1>
+        <p style="margin: 5px 0 0;">ជំពូកទី១៖ ទែម៉ូឌីណាមិច | មេរៀនទី១៖ ទ្រឹស្ដីស៊ីនេទិចនៃឧស្ម័ន</p>
+    </div>
+
+    <div class="alert">
+        <strong>⚠️ កំណត់សម្គាល់ពីការកែសម្រួល៖</strong> ឯកសារនេះត្រូវបានផ្ទៀងផ្ទាត់យ៉ាងម៉ត់ចត់ជាមួយនឹងឯកសារ PDF ដើម។ កំហុសឆ្គងពីមុនដូចជា បាត់លំហាត់ទី៨, កំហុសលេខក្នុងលំហាត់ទី២ និងទី១៨, លំដាប់នៃលំហាត់ទី២៤, ព្រមទាំងការកែតម្រូវចម្លើយ QCM លេខ ២១ និង ៣៥ ត្រូវបានកែប្រែរួចរាល់។
+    </div>
+
+    <div class="controls">
+        <button onclick="toggleDetails(true)">បើកដំណោះស្រាយទាំងអស់</button>
+        <button onclick="toggleDetails(false)">បិទដំណោះស្រាយទាំងអស់</button>
+        <button class="btn-print" onclick="preparePrint()">បោះពុម្ពជា PDF (Print)</button>
+    </div>
+
+    <!-- ផ្នែកទី១៖ QCM -->
+    <h2 class="section-title">ផ្នែកទី១៖ សំណួរពហុជ្រើសរើស (QCM) ចំនួន ៤៦</h2>
+    
+    <div class="qcm-item">
+        <p><strong>១.</strong> តើវិទ្យាសាស្ត្រសិក្សាអំពីរូបធាតុ និងចលនារបស់វា ហៅថាអ្វី?</p>
+        <span class="ans">ចម្លើយ៖ គ. រូបវិទ្យា</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>២.</strong> តើទែម៉ូឌីណាមិចសិក្សាអំពីអ្វី?</p>
+        <span class="ans">ចម្លើយ៖ ឃ. កម្ដៅ</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>៣.</strong> តើកម្រិតក្តៅ ឬត្រជាក់នៃអង្គធាតុមួយត្រូវបានគេហៅថាអ្វី?</p>
+        <span class="ans">ចម្លើយ៖ ខ. សីតុណ្ហភាព</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>៤.</strong> តើបរិមាណកម្ដៅដែលផ្ទេរពីអង្គធាតុក្តៅទៅអង្គធាតុត្រជាក់ជាងហៅថាអ្វី?</p>
+        <span class="ans">ចម្លើយ៖ ឃ. កម្ដៅ</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>៥.</strong> បណ្តារូបមន្តខាងក្រោមនេះ តើមួយណាជាទ្រឹស្តីបរិមាណចលនា និងអាំពុលស្យុង?</p>
+        <span class="ans">ចម្លើយ៖ គ. $\Delta\vec{p}=\vec{F}\cdot\Delta t$</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>៦.</strong> សម្ពាធនៃម៉ូលេគុលមួយមានម៉ាស m មានល្បឿន $v_{1}$ លើផ្ទៃខាងមួយនៃគូបជ្រុង L៖</p>
+        <span class="ans">ចម្លើយ៖ ឃ. $P=\frac{mv_1^2}{L^3}$</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>៧.</strong> សមីការភាពនៃឧស្ម័នបរិសុទ្ធ ឲ្យដោយកន្សោម៖</p>
+        <span class="ans">ចម្លើយ៖ ក. $PV=nRT$</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>៨.</strong> សម្ពាធឧស្ម័នសមាមាត្រនឹងចំនួនម៉ូលេគុលក្នុងមួយខ្នាតមាឌ និងតម្លៃមធ្យមនៃថាមពលស៊ីនេទិចរបស់ម៉ូលេគុល $[\frac{1}{2}m(v^2)_{av}]$</p>
+        <span class="ans">ចម្លើយ៖ ខ. $P=\frac{2}{3}(\frac{N}{V})\cdot\frac{1}{2}m(v^2)_{av}$</span>
+    </div>
+
+    <div class="note">
+        <strong>ចំណាំលើសំណួរទី ៩ ដល់ ១៣៖</strong> នៅក្នុងរូបភាពនៃ PDF ដើម វ៉ិចទ័រមុនទង្គិចគឺ តម្រង់ចេញពីផ្ទៃ X (សញ្ញាដក) ហើយក្រោយទង្គិចតម្រង់ចូលផ្ទៃ X (សញ្ញាបូក)។ តែក្នុងអត្ថបទប្រធាន និងទ្រឹស្ដីទូទៅ ម៉ូលេគុលរត់ពី Y ទៅ X (មុនទង្គិច) ត្រូវមានទិសដៅស្របអ័ក្ស (+v) និងក្រោយទង្គិច (-v)។ ទីនេះយើងយកចម្លើយតាម "អត្ថបទសៀវភៅពុម្ព" ដែលផ្ដល់ជម្រើសត្រូវជាមួយនឹងអក្សរចម្លើយក្នុង PDF ដើម។
+    </div>
+    
+    <div class="qcm-item">
+        <p><strong>៩.</strong> ឧបមាថា នៅស្ថានភាពដើម ម៉ូលេគុលមួយផ្លាស់ទីពីផ្ទៃខាង Y តម្រង់ទៅផ្ទៃខាង X ដោយវ៉ិចទ័រល្បឿន $\vec{v}_1$ ។ បរិមាណចលនាមុននឹងទង្គិចផ្ទៃខាង X គឺ៖</p>
+        <span class="ans">ចម្លើយ៖ ខ. $\vec{p}=-m\vec{v}_1$ (ផ្អែកតាមរូបភាពដែលបង្ហាញ $-\vec{v}_1$ មុនទង្គិច)</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>១០.</strong> មើលរូបភាពក្នុងសំណួរទី៩ បរិមាណចលនាក្រោយទង្គិចនឹងផ្ទៃខាង X គឺ៖</p>
+        <span class="ans">ចម្លើយ៖ ក. $\vec{p}=m\vec{v}_1$</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>១១.</strong> មើលរូបភាពក្នុងសំណួរទី៩ រាល់ពេលទង្គិចម៉ូលេគុលវាមានបម្រែបម្រួលបរិមាណចលនាគឺ៖</p>
+        <span class="ans">ចម្លើយ៖ ឃ. $\Delta\vec{p}=+m\vec{v}_1+m\vec{v}_1$ (ដោយសារ $\Delta\vec{p} = \vec{p}_f - \vec{p}_i = m\vec{v}_1 - (-m\vec{v}_1)$)</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>១២.</strong> ម៉ូលេគុលផ្លាស់ទីបានចម្ងាយ 2L ... រយៈពេលនៃចលនាម៉ូលេគុលនេះគឺ៖</p>
+        <span class="ans">ចម្លើយ៖ គ. $\Delta t=\frac{2L}{v_1}$</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>១៣.</strong> កម្លាំងមធ្យមដែលផ្ទៃខាង X មានអំពើលើម៉ូលេគុលឧស្ម័នគឺ៖</p>
+        <span class="ans">ចម្លើយ៖ ឃ. $F' = \frac{\Delta p}{\Delta t} = \frac{mv_1^2}{L}$</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>១៤.</strong> កម្លាំងដែលឧស្ម័នមានអំពើលើផ្ទៃខាង X ក្នុងមួយខ្នាតផ្ទៃគឺសម្ពាធ៖</p>
+        <span class="ans">ចម្លើយ៖ ក. $P=\frac{F}{A}=\frac{mv_1^2}{V}$</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>១៥.</strong> បើ N ម៉ូលេគុលផ្លាស់ទីតាមទិសដៅតែមួយ... តើសម្ពាធ N ម៉ូលេគុលលើផ្ទៃខាង X សរសេរយ៉ាងដូចម្តេច?</p>
+        <span class="ans">ចម្លើយ៖ ក. $P=\frac{m}{V}(v_1^2+v_2^2+...+v_N^2)$</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>១៦.</strong> ដើម្បីគណនាតម្លៃមធ្យមនៃការរេល្បឿនរបស់ N ម៉ូលេគុល តើគេប្រើទំនាក់ទំនងណា?</p>
+        <span class="ans">ចម្លើយ៖ ខ. $(v^2)_{av}=\frac{(v_1^2+v_2^2+...+v_N^2)}{N}$</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>១៧.</strong> សម្ពាធសរុបនៃ N ម៉ូលេគុលមានទំនាក់ទំនងដូចម្តេច?</p>
+        <span class="ans">ចម្លើយ៖ ក. $P=\frac{Nm}{V}(v^2)_{av}$</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>១៨.</strong> សម្ពាធឧស្ម័នសមាមាត្រនឹងសីតុណ្ហភាព (T) សមាមាត្រនឹងចំនួនម៉ូលេគុល (N) ហើយច្រាសសមាមាត្រនឹងមាឌ (V) ឱ្យដោយកន្សោម៖</p>
+        <span class="ans">ចម្លើយ៖ ខ. $P=k\frac{NT}{V}$</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>១៩.</strong> កម្រិតសេរីនៃម៉ូលេគុលឧស្ម័នឌីអាតូមគឺ៖</p>
+        <span class="ans">ចម្លើយ៖ ក. 5</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>២០.</strong> ថេរសកលនៃឧស្ម័ន ឱ្យដោយកន្សោម៖</p>
+        <span class="ans">ចម្លើយ៖ គ. $R=k_BN_A$</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>២១.</strong> ដង់ស៊ីតេម៉ាសម៉ូលេគុលឧស្ម័ន ឬម៉ាសមាឌឧស្ម័ន ឱ្យដោយកន្សោម៖</p>
+        <span class="ans">ចម្លើយ៖ ឃ. ចម្លើយទាំងអស់ (ទាំង $\rho=\frac{m}{V}$, $\rho=\frac{m}{L^3}$ និង $\rho=\frac{m_0N}{V}$ សុទ្ធតែត្រឹមត្រូវ) <span style="color:red; font-size:0.8em;">(បានកែតម្រូវពី ខ ទៅ ឃ)</span></span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>២២.</strong> បណ្តារូបមន្តខាងក្រោម តើមួយណាជារូបមន្តចំនួនម៉ូល?</p>
+        <span class="ans">ចម្លើយ៖ ឃ. ចម្លើយទាំងអស់ ($n=\frac{m}{M}, n=\frac{N}{N_A}, n=\frac{V}{V_{mol}}$)</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>២៣.</strong> រូបមន្តថាមពលស៊ីនេទិចមធ្យមរបស់ម៉ូលេគុលឧស្ម័ននីមួយៗ?</p>
+        <span class="ans">ចម្លើយ៖ ខ. $K_{av}=\frac{3}{2}k_BT$</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>២៤.</strong> រូបមន្តថាមពលស៊ីនេទិចសរុបនៃ N ម៉ូលេគុល?</p>
+        <span class="ans">ចម្លើយ៖ ខ. $K=\frac{3}{2}Nk_BT$</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>២៥.</strong> រូបមន្តល្បឿនប្រសិទ្ធរបស់ម៉ូលេគុល?</p>
+        <span class="ans">ចម្លើយ៖ ក. $v_{rms}=\sqrt{\frac{3RT}{M}}$</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>២៦.</strong> តើការសិក្សាពីលំនឹងកម្ដៅរបស់អង្គធាតុ ហៅថាអ្វី?</p>
+        <span class="ans">ចម្លើយ៖ ខ. ច្បាប់ទីសូន្យ</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>២៧.</strong> មួយម៉ូលនៃឧស្ម័ន នៅសីតុណ្ហភាព និងសម្ពាធស្តង់ដា (STP) គឺមានមាឌ</p>
+        <span class="ans">ចម្លើយ៖ ឃ. $22.4 dm^3$ (ស្មើនឹង $22.4 L$)</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>២៨.</strong> តើថេរអាវ៉ូកាដ្រូមានតម្លៃស្មើនឹងប៉ុន្មាន?</p>
+        <span class="ans">ចម្លើយ៖ ក. $6.022\times 10^{23}$ ម៉ូលេគុល/mol</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>២៩.</strong> តើល្បឿនមធ្យមនៃម៉ូលេគុលឧស្ម័នបរិសុទ្ធស្មើនឹងប៉ុន្មាន?</p>
+        <span class="ans">ចម្លើយ៖ ឃ. សូន្យ (បើគិតជាវ៉ិចទ័រល្បឿនមធ្យម $\vec{v}_{av} = 0$)</span>
+    </div>
+    <div class="qcm-item">
+        <p><strong>៣០.</strong> ថាមពលក្នុងនៃឧស្ម័នបរិសុទ្ធមួយអាស្រ័យទៅនឹងៈ</p>
+        <span class="ans">ចម្លើយ៖ ខ. សីតុណ្ហភាពដាច់ខាត</span>
+    </div>
+    
+    <!-- QCM Calculations -->
+    <details><summary>៣១. ចូរសំដែងសីតុណ្ហភាពសែស្យុស $50^\circ C$ គិតជាកែលវិន (K):</summary>
+    <div class="content">$$T = 50 + 273 = 323\text{ K}$$ <span class="ans">ចម្លើយ៖ ក. 323 K</span></div></details>
+    
+    <details><summary>៣២. តើគេប្រើរូបមន្តណាមួយ ដើម្បីគណនាម៉ាសមួយម៉ូលេគុលនៃឧស្ម័ន?</summary>
+    <div class="content"><span class="ans">ចម្លើយ៖ ឃ. $m_o = \frac{M}{N_A}$</span></div></details>
+    
+    <details><summary>៣៣. ថាមពលស៊ីនេទិចមធ្យមនៃម៉ូលេគុលឧស្ម័ននីមួយៗគឺ៖</summary>
+    <div class="content"><span class="ans">ចម្លើយ៖ ក. សមាមាត្រនឹងសីតុណ្ហភាព ($K_{av} = \frac{3}{2}k_BT$)</span></div></details>
+    
+    <details><summary>៣៤. តើឧស្ម័នមួយណាដែលមានល្បឿនប្រសិទ្ធអតិបរមា នៅសីតុណ្ហភាពដូចគ្នា?</summary>
+    <div class="content">ល្បឿនប្រសិទ្ធ $v_{rms} = \sqrt{\frac{3RT}{M}}$ ច្រាសសមាមាត្រនឹងម៉ាសម៉ូល $M$។ អ៊ីដ្រូសែនមាន $M$ តូចជាងគេ ($2g/mol$) ដូច្នេះល្បឿនវាធំជាងគេ។ <span class="ans">ចម្លើយ៖ ឃ. អ៊ីដ្រូសែន</span></div></details>
+    
+    <details><summary>៣៥. តើឧស្ម័នបរិសុទ្ធជាអ្វី?</summary>
+    <div class="content">លក្ខណៈទាំង ៣ (គោរពច្បាប់ឧស្ម័ន, ជិតបរិយាកាសធម្មតា, គ្មានអន្តរកម្ម) សុទ្ធតែត្រឹមត្រូវ។ <span class="ans">ចម្លើយ៖ ឃ. ចម្លើយលេខ១, ២ និង ៣ <span style="color:red; font-size:0.8em;">(បានកែតម្រូវពី គ ទៅ ឃ)</span></span></div></details>
+    
+    <details><summary>៣៦. សម្ពាធដែលបង្កើតដោយឧស្ម័នអាស្រ័យនឹង៖</summary>
+    <div class="content">សម្ពាធ $P = \frac{1}{3}\rho (v^2)_{av}$ ដូច្នេះវាអាស្រ័យនឹងដង់ស៊ីតេ និងមធ្យមការេល្បឿន។ <span class="ans">ចម្លើយ៖ ខ. ដង់ស៊ីតេនៃឧស្ម័ន</span></div></details>
+    
+    <details><summary>៣៧. តើថេរសកលនៃឧស្ម័នមានតម្លៃស្មើនឹងប៉ុន្មាន?</summary>
+    <div class="content"><span class="ans">ចម្លើយ៖ ក. $R=8.31 J/mol\cdot K$</span></div></details>
+
+    <details><summary>៣៨. ឧស្ម័នមួយមាន $n=0.08\times 10^{-1}$ mol មានសម្ពាធ $p=5.0\times 10^5$ Pa នៅ $60^\circ C$។ រកមាឌ?</summary>
+    <div class="content">
+        $T = 60 + 273 = 333\text{ K}$។ $$V = \frac{nRT}{P} = \frac{0.008 \times 8.31 \times 333}{5 \times 10^5} \approx 4.43 \times 10^{-5}\text{ m}^3$$ <span class="ans">ចម្លើយ៖ ក. $4.43\times 10^{-5} m^3$</span>
+    </div></details>
+
+    <details><summary>៣៩. ឧស្ម័ន $H_2$ 1.0mol មានសម្ពាធ 2.0atm និងមាឌ 0.25 $m^3$។ គណនាសីតុណ្ហភាព T។</summary>
+    <div class="content">
+        $P = 2.0 \times 10^5\text{ Pa}$។ $$T = \frac{PV}{nR} = \frac{2 \times 10^5 \times 0.25}{1.0 \times 8.31} = \frac{50000}{8.31} \approx 6016.8\text{ K} = 60.17 \times 10^2\text{ K}$$ <span class="ans">ចម្លើយ៖ ក. $60.17\times 10^2 K$</span>
+    </div></details>
+
+    <details><summary>៤០. ល្បឿនប្រសិទ្ធ $O_2$ (នៅ T) ស្មើនឹង He នៅ 300K។ រក T របស់ $O_2$។</summary>
+    <div class="content">
+        $\frac{T_{O_2}}{M_{O_2}} = \frac{T_{He}}{M_{He}} \Rightarrow T_{O_2} = 300 \times \frac{32}{4} = 300 \times 8 = 2400\text{ K}$ <span class="ans">ចម្លើយ៖ ឃ. 2400 K</span>
+    </div></details>
+
+    <details><summary>៤១. មាឌថេរ បើសម្ពាធកើនទ្វេដង តើល្បឿនប្រសិទ្ធប្រែប្រួលយ៉ាងណា?</summary>
+    <div class="content">
+        មាឌថេរ $P \propto T$។ សម្ពាធកើន ២ដង សីតុណ្ហភាពកើន ២ដង។ ដោយ $v_{rms} \propto \sqrt{T}$ នោះល្បឿនកើន $\sqrt{2}$ ដង។ <span class="ans">ចម្លើយ៖ គ. $\sqrt{2}v_{rms}$</span>
+    </div></details>
+
+    <details><summary>៤២. បើថាមពលស៊ីនេទិចមធ្យមកើនឡើងដល់ ៩ដង នៃ $K_{av}$ រកសម្ពាធថ្មី។</summary>
+    <div class="content">
+        <div class="note"><strong>កែតម្រូវ៖</strong> ក្នុង PDF សរសេរ "១ដង" ដែលជាកំហុសវាយអក្សរ ត្រូវកែជា "៩ដង" ទើបមានចម្លើយ។</div>
+        $K_{av} \propto T$ និង $P \propto T$ ពេល V ថេរ។ បើ $K_{av}$ កើន ៩ដង នោះ T កើន ៩ដង នាំឱ្យ P កើន ៩ដង។ <span class="ans">ចម្លើយ៖ ខ. 9P</span>
+    </div></details>
+
+    <details><summary>៤៣. $P = 1.5\times 10^5$ Pa នៅ 350K។ គណនាចំនួនម៉ូលេគុលក្នុងមួយខ្នាតមាឌ (N/V)។</summary>
+    <div class="content">
+        $P = \frac{N}{V} k_B T \Rightarrow \frac{N}{V} = \frac{P}{k_B T} = \frac{1.5 \times 10^5}{1.38 \times 10^{-23} \times 350} \approx 3.1 \times 10^{25}\text{ m}^{-3}$ <span class="ans">ចម្លើយ៖ ឃ. $3.1\times 10^{25} m^{-3}$</span>
+    </div></details>
+
+    <details><summary>៤៤. អំពូល X មាឌធំជាង Y ២ដង។ លំនឹងសម្ពាធដូចគ្នា។ X (200K, x mol), Y (400K, ? mol)។</summary>
+    <div class="content">
+        $P_X = P_Y \Rightarrow \frac{x \cdot R \cdot 200}{2V_Y} = \frac{n_Y \cdot R \cdot 400}{V_Y} \Rightarrow 100x = 400n_Y \Rightarrow n_Y = \frac{x}{4}$ <span class="ans">ចម្លើយ៖ ខ. $x/4$</span>
+    </div></details>
+
+    <details><summary>៤៥. ដង់ស៊ីតេ $Ar$ គឺ $\rho=1.60 kg/m^3$, $P=1.00\times 10^5 Pa$។ រកល្បឿនប្រសិទ្ធ។</summary>
+    <div class="content">
+        ប្រើរូបមន្តតាមដង់ស៊ីតេ៖ $v_{rms} = \sqrt{\frac{3P}{\rho}} = \sqrt{\frac{3 \times 10^5}{1.6}} = \sqrt{187500} \approx 433\text{ m/s}$ <span class="ans">ចម្លើយ៖ ឃ. 433 m/s</span>
+    </div></details>
+
+    <details><summary>៤៦. មាឌថេរ សីតុណ្ហភាពដើម $25^\circ C$ ឡើងសម្ពាធពី $505kPa$ ដល់ $552kPa$។ រក $T_2$។</summary>
+    <div class="content">
+        $T_1 = 25+273=298K$។ $T_2 = T_1 \times \frac{P_2}{P_1} = 298 \times \frac{552}{505} \approx 325.7\text{ K}$ <span class="ans">ចម្លើយ៖ ក. 325.9K</span> (ប្រហែលជិតបំផុត)
+    </div></details>
+
+
+    <!-- ផ្នែកទី២៖ លំហាត់អនុវត្ត -->
+    <h2 class="section-title">ផ្នែកទី២៖ ដំណោះស្រាយលំហាត់អនុវត្ត (៣០ លំហាត់)</h2>
+
+    <details><summary>លំហាត់ទី១៖ គណនាមាឌរបស់ឧស្ម័នតាមសមីការភាព</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> ឧស្ម័នបរិសុទ្ធមួយមានចំនួនម៉ូល $n=0.25$ mol មានសម្ពាធ $P=250kPa$ នៅសីតុណ្ហភាព $57^\circ C$។ គណនាមាឌរបស់ឧស្ម័ននោះ។</p>
+        <div class="math-block">
+            $n = 0.25 \text{ mol}$, $P = 250 \times 10^3\text{ Pa}$, $T = 57 + 273 = 330\text{ K}$, $R = 8.31 \text{ J/(mol}\cdot\text{K)}$ <br>
+            តាមសមីការ $PV=nRT \Rightarrow V = \frac{nRT}{P}$<br>
+            $$V = \frac{0.25 \times 8.31 \times 330}{250 \times 10^3} = \frac{685.575}{250000} \approx 0.00274 \text{ m}^3$$
+        </div>
+        <div class="final">ចម្លើយ៖ $V = 0.0027 \text{ m}^3$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី២៖ គណនាមាឌរបស់ឧស្ម័ន (លក្ខខណ្ឌ $0^\circ C, 1atm$)</summary>
+    <div class="content">
+        <div class="note"><strong>កែតម្រូវលេខ៖</strong> បង្ហាញលេខទសភាគច្បាស់លាស់មុនធ្វើការបង្គត់។</div>
+        <p><strong>ប្រធាន៖</strong> $n = 1.0\text{ mol}$, $P = 1\text{ atm}$, $t = 0^\circ C$។ រកមាឌ $V$។</p>
+        <div class="math-block">
+            $T = 273\text{ K}$, $P = 10^5\text{ Pa}$<br>
+            $$V = \frac{1.0 \times 8.31 \times 273}{10^5} = \frac{2268.63}{100000} = 2268.63 \times 10^{-5} \text{ m}^3 \approx 2269 \times 10^{-5} \text{ m}^3$$
+        </div>
+        <div class="final">ចម្លើយ៖ $V = 2269 \times 10^{-5} \text{ m}^3$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី៣៖ គណនាល្បឿនប្រសិទ្ធនៃម៉ូលេគុល $O_2$</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> រក $v_{rms}$ នៃ $O_2$ នៅ $25.0^\circ C$។ $M=32g/mol$។</p>
+        <div class="math-block">
+            $T = 25 + 273 = 298\text{ K}$, $M = 32 \times 10^{-3}\text{ kg/mol}$<br>
+            $$v_{rms} = \sqrt{\frac{3RT}{M}} = \sqrt{\frac{3 \times 8.31 \times 298}{32 \times 10^{-3}}} = \sqrt{\frac{7429.14}{0.032}} = \sqrt{232160.6} \approx 481.8 \text{ m/s}$$
+        </div>
+        <div class="final">ចម្លើយ៖ $v_{rms} \approx 482 \text{ m/s}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី៤៖ គណនាល្បឿនប្រសិទ្ធរបស់អាតូមអេស្យូម $He$</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> រក $v_{rms}$ នៃ $He$ នៅ $400K$។ $M_{He}=4g/mol$។</p>
+        <div class="math-block">
+            $M = 4 \times 10^{-3}\text{ kg/mol}$<br>
+            $$v_{rms} = \sqrt{\frac{3 \times 8.31 \times 400}{4 \times 10^{-3}}} = \sqrt{\frac{9972}{0.004}} = \sqrt{2493000} \approx 1578.9 \text{ m/s}$$
+        </div>
+        <div class="final">ចម្លើយ៖ $v_{rms} \approx 1580 \text{ m/s}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី៥៖ គណនាចំនួនម៉ូលនៃឧស្ម័ន $O_2$</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> គណនា $n$ នៃ $O_2$ ដែលមានម៉ាស $m=12g$។ $M=32g/mol$។</p>
+        <div class="math-block">
+            $$n = \frac{m}{M} = \frac{12}{32} = 0.375 \text{ mol} \approx 0.38 \text{ mol}$$
+        </div>
+        <div class="final">ចម្លើយ៖ $n = 0.38 \text{ mol}$</div>
+    </div></details>
+    
+    <details><summary>លំហាត់ទី៦៖ គណនាល្បឿនប្រសិទ្ធសេណុង ($Xe$)</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> រក $v_{rms}$ នៃ $Xe$ នៅ $215^\circ C$។ $M_{Xe}=131.3 g/mol$។</p>
+        <div class="math-block">
+            $T = 215 + 273 = 488\text{ K}$, $M = 0.1313\text{ kg/mol}$<br>
+            $$v_{rms} = \sqrt{\frac{3 \times 8.31 \times 488}{0.1313}} = \sqrt{\frac{12165.84}{0.1313}} \approx 304.39 \text{ m/s}$$
+        </div>
+        <div class="final">ចម្លើយ៖ $v_{rms} \approx 304 \text{ m/s}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី៧៖ គណនាសីតុណ្ហភាពតាមរយៈល្បឿនមធ្យម</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> គណនាសីតុណ្ហភាពដែលល្បឿនមធ្យមនៃ $O_2$ ស្មើនឹង $1500m/s$។ $M_{O_2}=32\times 10^{-3}kg/mol$។</p>
+        <div class="math-block">
+            រូបមន្តល្បឿនមធ្យម៖ $v_{av} = \sqrt{\frac{8RT}{\pi M}} \Rightarrow T = \frac{v_{av}^2 \pi M}{8R}$<br>
+            $$T = \frac{1500^2 \times 3.14 \times 32 \times 10^{-3}}{8 \times 8.31} \approx 3401 \text{ K}$$
+        </div>
+        <div class="final">ចម្លើយ៖ $T \approx 3401 \text{ K}$</div>
+    </div></details>
+
+    <details open style="border-left: 4px solid var(--alert-border);"><summary>លំហាត់ទី៨៖ គណនាល្បឿនប្រសិទ្ធនៃម៉ូលេគុល $O_2$ <span style="color:red;">(លំហាត់ដែលបានបន្ថែម)</span></summary>
+    <div class="content">
+        <div class="note"><strong>កែតម្រូវ៖</strong> លំហាត់នេះត្រូវរំលងបាត់នៅក្នុងកំណែមុន។ ឥឡូវត្រូវបានបញ្ចូលមកវិញហើយ។</div>
+        <p><strong>ប្រធាន៖</strong> គណនាល្បឿនប្រសិទ្ធនៃម៉ូលេគុលឧស្ម័នអុកស៊ីហ្សែននៅសីតុណ្ហភាព 320K។ គេឱ្យ $M_{O_2}=32g/mol$។</p>
+        <div class="math-block">
+            $T = 320\text{ K}$, $M = 32 \times 10^{-3}\text{ kg/mol}$<br>
+            $$v_{rms} = \sqrt{\frac{3RT}{M}} = \sqrt{\frac{3 \times 8.31 \times 320}{32 \times 10^{-3}}} = \sqrt{\frac{7977.6}{0.032}} = \sqrt{249300} \approx 499.29 \text{ m/s}$$
+        </div>
+        <div class="final">ចម្លើយ៖ $v_{rms} = 499 \text{ m/s}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី៩៖ គណនាសីតុណ្ហភាពរបស់ឧស្ម័នតាម $m$ និង $V$</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> ធុងចំណុះ $0.025m^3$ ផ្ទុក $N_2$ $0.084kg$ សម្ពាធ $3.17atm$។ គណនា T។ ($M_{N_2}=28g/mol$)</p>
+        <div class="math-block">
+            $P = 3.17 \times 10^5\text{ Pa}$, $m = 84\text{ g}$ ទុកម៉ាសម៉ូលជា $28\text{ g/mol}$ ដើម្បីសម្រួល។<br>
+            $$T = \frac{PVM}{mR} = \frac{(3.17 \times 10^5) \times 0.025 \times 28}{84 \times 8.31} = \frac{221900}{698.04} \approx 317.88 \text{ K}$$
+        </div>
+        <div class="final">ចម្លើយ៖ $T \approx 318 \text{ K}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី១០៖ គណនាចំនួនអាតូមស្ពាន់ធ័រ</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> តើមានស្ពាន់ធ័រប៉ុន្មានអាតូមក្នុង $16.3g$ ស្ពាន់ធ័រ? $M_s=32g/mol$។</p>
+        <div class="math-block">
+            $n = \frac{m}{M} = \frac{16.3}{32} \approx 0.509 \text{ mol}$<br>
+            $$N = n \times N_A = 0.509 \times 6.022 \times 10^{23} \approx 3.06 \times 10^{23} \text{ អាតូម}$$
+        </div>
+        <div class="final">ចម្លើយ៖ $N = 3.06 \times 10^{23} \text{ អាតូម}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី១១៖ គណនាចំនួនអាតូមអ៊ីដ្រូសែនក្នុងអ៊ុយរេ</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> រកចំនួនអាតូម H ក្នុង $25.6g$ អ៊ុយរេ $(NH_2)_2CO$។ $M=60g/mol$។</p>
+        <div class="math-block">
+            ក្នុង ១ម៉ូលេគុលអ៊ុយរេ មាន ៤អាតូមអ៊ីដ្រូសែន។<br>
+            ចំនួនម៉ូលេគុលអ៊ុយរេសរុប $N_{urea} = \frac{25.6}{60} \times 6.022 \times 10^{23} \approx 2.569 \times 10^{23}$<br>
+            $$N_H = 4 \times 2.569 \times 10^{23} = 10.276 \times 10^{23} \text{ អាតូម}$$
+        </div>
+        <div class="final">ចម្លើយ៖ $N_H = 10.27 \times 10^{23} \text{ អាតូម}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី១២៖ គណនាតម្លៃថាមពលស៊ីនេទិចមធ្យមជា eV</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> រក $K_{av}$ របស់ម៉ូលេគុល H2 ជា eV នៅ $27^\circ C$។ ($1eV = 1.6\times 10^{-19}J$)</p>
+        <div class="math-block">
+            $T = 300\text{ K}$។ $K_{av} = 1.5 \times (1.38 \times 10^{-23}) \times 300 = 6.21 \times 10^{-21} \text{ J}$<br>
+            $$K_{av} (\text{eV}) = \frac{6.21 \times 10^{-21}}{1.6 \times 10^{-19}} = 388.1 \times 10^{-4} \text{ eV}$$
+        </div>
+        <div class="final">ចម្លើយ៖ $K_{av} = 388.11 \times 10^{-4} \text{ eV}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី១៣៖ គណនាល្បឿនមធ្យម និងល្បឿនប្រសិទ្ធ</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> ភាគល្អិត៥ មានល្បឿន 1, 2, 3, 4, 5 m/s។ គណនា v និង $v_{rms}$។ ($\sqrt{11}=3.32$)</p>
+        <div class="math-block">
+            ក. $v = \frac{1+2+3+4+5}{5} = 3 \text{ m/s}$<br>
+            ខ. $v_{rms} = \sqrt{\frac{1^2+2^2+3^2+4^2+5^2}{5}} = \sqrt{\frac{55}{5}} = \sqrt{11} \approx 3.32 \text{ m/s}$
+        </div>
+        <div class="final">ចម្លើយ៖ ក. $v = 3\text{ m/s}$, ខ. $v_{rms} = 3.32\text{ m/s}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី១៤៖ គណនាសីតុណ្ហភាពរបស់ឧស្ម័ន $CO_2$</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> $CO_2$ $100g$, $55L$, $1.0atm$។ គណនា T។ $M_{CO_2}=44g/mol$។</p>
+        <div class="math-block">
+            $V = 55 \times 10^{-3}\text{ m}^3$, $P = 10^5\text{ Pa}$<br>
+            $$T = \frac{PVM}{mR} = \frac{10^5 \times 55 \times 10^{-3} \times 44}{100 \times 8.31} \approx 291.2 \text{ K}$$
+        </div>
+        <div class="final">ចម្លើយ៖ $T = 291\text{ K}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី១៥៖ ល្បឿនប្រសិទ្ធនៃ $O_2$ និង $H_2$ នៅ 300K</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> $M_{O_2}=32g/mol$, $M_{H_2}=2g/mol$។ រក $v_{rms}$ នៅ 300K។</p>
+        <div class="math-block">
+            $$v_{rms}(O_2) = \sqrt{\frac{3 \times 8.31 \times 300}{0.032}} = 483 \text{ m/s}$$<br>
+            $$v_{rms}(H_2) = \sqrt{\frac{3 \times 8.31 \times 300}{0.002}} = 1933.7 \text{ m/s} \approx 1934 \text{ m/s}$$
+        </div>
+        <div class="final">ចម្លើយ៖ $v_{rms}(O_2)=483\text{m/s}$, $v_{rms}(H_2)=1934\text{m/s}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី១៦៖ គណនាម៉ាសឧស្ម័នក្នុងធុង</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> រកម៉ាសក្នុងធុង $500L$ នៅ $40^\circ C$, $M=32g/mol$, $P=20atm$។</p>
+        <div class="math-block">
+            $V = 0.5\text{ m}^3$, $T = 313\text{ K}$, $P = 20 \times 10^5\text{ Pa}$, $M=0.032\text{ kg/mol}$<br>
+            $$m = \frac{PVM}{RT} = \frac{20 \times 10^5 \times 0.5 \times 0.032}{8.31 \times 313} \approx 12.3 \text{ kg}$$
+        </div>
+        <div class="final">ចម្លើយ៖ $m = 12.3 \text{ kg}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី១៧៖ គណនាថាមពលស៊ីនេទិចមធ្យមនៃ $O_2$</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> $n=2.5mol$, $V=4L$, $P=5atm$។ រក $K_{av}$ របស់ម៉ូលេគុល១។</p>
+        <div class="math-block">
+            $V=4\times 10^{-3}m^3$, $P=5\times 10^5Pa$។ រក T សិន។<br>
+            $$T = \frac{PV}{nR} = \frac{5\times 10^5 \times 4\times 10^{-3}}{2.5 \times 8.31} \approx 96.27\text{ K}$$<br>
+            $$K_{av} = \frac{3}{2}k_BT = 1.5 \times 1.38\times 10^{-23} \times 96.27 \approx 199.27 \times 10^{-23}\text{ J}$$
+        </div>
+        <div class="final">ចម្លើយ៖ $K_{av} = 199.27 \times 10^{-23} \text{ J}$</div>
+    </div></details>
+
+    <details open style="border-left: 4px solid var(--alert-border);"><summary>លំហាត់ទី១៨៖ គណនាសីតុណ្ហភាពតាមថាមពលជា eV <span style="color:red;">(កែតម្រូវលេខ)</span></summary>
+    <div class="content">
+        <div class="note"><strong>កែតម្រូវ៖</strong> កែតួលេខ $\frac{12800}{4.14}$ មកជា $\frac{1280}{4.14}$ វិញដើម្បីឱ្យត្រឹមត្រូវតាមទម្រង់ទសភាគ។</div>
+        <p><strong>ប្រធាន៖</strong> ថាមពលស៊ីនេទិចមធ្យម $K_{av} = 0.040eV$។ រក T។</p>
+        <div class="math-block">
+            $K_{av} = 0.040 \times 1.6 \times 10^{-19} = 6.4 \times 10^{-21}\text{ J}$<br>
+            $$T = \frac{2K_{av}}{3k_B} = \frac{2 \times 6.4 \times 10^{-21}}{3 \times 1.38 \times 10^{-23}} = \frac{12.8 \times 10^{-21}}{4.14 \times 10^{-23}} = \frac{12.8}{4.14 \times 10^{-2}} = \frac{1280}{4.14} \approx 309.17\text{ K}$$
+        </div>
+        <div class="final">ចម្លើយ៖ $T = 309.2\text{ K}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី១៩៖ គណនាតម្លៃមធ្យមថាមពលស៊ីនេទិចរបស់មេតាន</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> រក $K_{av}$ របស់មេតាន $CH_4$ នៅ $27^\circ C$។</p>
+        <div class="math-block">
+            $T = 300\text{ K}$។ ថេរបុលស្មាន់ $k_B = \frac{R}{N_A} \approx 1.38 \times 10^{-23}\text{ J/K}$<br>
+            $$K_{av} = \frac{3}{2}k_BT = 1.5 \times (1.38 \times 10^{-23}) \times 300 = 6.21 \times 10^{-21} \text{ J}$$
+        </div>
+        <div class="final">ចម្លើយ៖ $K_{av} = 6.21 \times 10^{-21}\text{ J}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី២០៖ គណនាសីតុណ្ហភាពអាតូម $Ar$</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> រក T របស់ Ar ដែល $v_{rms}(Ar) = v_{rms}(He)$ នៅ $-20^\circ C$។ $M_{Ar}=39.9$, $M_{He}=4$។</p>
+        <div class="math-block">
+            $T_{He} = 253\text{ K}$។ ដោយល្បឿនស្មើគ្នា នោះ $\frac{T_{Ar}}{M_{Ar}} = \frac{T_{He}}{M_{He}}$<br>
+            $$T_{Ar} = 253 \times \frac{39.9}{4} = 2523.675 \text{ K}$$
+        </div>
+        <div class="final">ចម្លើយ៖ $T_{Ar} = 2524 \text{ K}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី២១៖ គណនាសីតុណ្ហភាពម៉ូលេគុល $SO_2$</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> រក T របស់ $SO_2$ ដែល $v_{rms}(SO_2) = v_{rms}(O_2)$ នៅ 303K។</p>
+        <div class="math-block">
+            $$\frac{T_{SO_2}}{64} = \frac{303}{32} \Rightarrow T_{SO_2} = 303 \times 2 = 606 \text{ K}$$
+        </div>
+        <div class="final">ចម្លើយ៖ $T_{SO_2} = 606 \text{ K}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី២២៖ ផលធៀបល្បឿនប្រសិទ្ធ $H_2$ និង $O_2$</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> រកផលធៀប $v_{rms}(H_2)$ នៅ 50K ធៀបនឹង $v_{rms}(O_2)$ នៅ 800K។</p>
+        <div class="math-block">
+            $$\frac{v_{rms}(H_2)}{v_{rms}(O_2)} = \sqrt{\frac{T_{H_2}}{M_{H_2}} \times \frac{M_{O_2}}{T_{O_2}}} = \sqrt{\frac{50}{2} \times \frac{32}{800}} = \sqrt{25 \times \frac{1}{25}} = \sqrt{1} = 1$$
+        </div>
+        <div class="final">ចម្លើយ៖ ផលធៀប $= 1$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី២៣៖ ផលធៀបល្បឿនប្រសិទ្ធ $O_3$ និង $O_2$</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> រកផលធៀប $v_{rms}(O_3)$ និង $O_2$ នៅ $27^\circ C$។ $M_{O_2}=32, M_{O_3}=48$។</p>
+        <div class="math-block">
+            $$\frac{v_{rms}(O_3)}{v_{rms}(O_2)} = \sqrt{\frac{M_{O_2}}{M_{O_3}}} = \sqrt{\frac{32}{48}} = \sqrt{\frac{2}{3}}$$
+        </div>
+        <div class="final">ចម្លើយ៖ ផលធៀប $= \sqrt{2/3}$</div>
+    </div></details>
+
+    <details open style="border-left: 4px solid var(--alert-border);"><summary>លំហាត់ទី២៤៖ សម្ពាធ និងកម្លាំងអេស្យូម <span style="color:red;">(កែតម្រូវលំដាប់)</span></summary>
+    <div class="content">
+        <div class="note"><strong>កែតម្រូវ៖</strong> ដោះស្រាយសំណួរ (ក) រកសម្ពាធមុន ទើបដោះស្រាយសំណួរ (ខ) រកកម្លាំង តាមលំដាប់ប្រធានក្នុង PDF ដើម។ ($1.25^2 = 1.5625 \approx 1.56$)</div>
+        <p><strong>ប្រធាន៖</strong> $m=6.68\times 10^{-27}kg$, $v=12500km/s$, ក្នុងគូបទ្រនុង $L=1.25mm$។ (ក) រក P, (ខ) រក F។</p>
+        <div class="math-block">
+            $v = 1.25\times 10^7\text{ m/s}$, $L = 1.25\times 10^{-3}\text{ m}$<br>
+            <strong>ក. រកសម្ពាធ $P$ លើផ្ទៃខាង៖</strong><br>
+            $$P = \frac{mv_x^2}{L^3} = \frac{6.68 \times 10^{-27} \times (1.25 \times 10^7)^2}{(1.25 \times 10^{-3})^3} = \frac{10.4375 \times 10^{-13}}{1.953125 \times 10^{-9}} = 5.344 \times 10^{-4}\text{ Pa}$$<br>
+            <strong>ខ. រកកម្លាំង $F$៖</strong> $A = L^2 = (1.25\times 10^{-3})^2 = 1.5625\times 10^{-6}\text{ m}^2$<br>
+            $$F = P \times A = 5.344 \times 10^{-4} \times 1.56 \times 10^{-6} \approx 8.34 \times 10^{-10}\text{ N}$$
+        </div>
+        <div class="final">ចម្លើយ៖ ក. $P = 5.344 \times 10^{-4}\text{Pa}$, ខ. $F = 8.34 \times 10^{-10}\text{N}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី២៥៖ $K_{av}, K$ និង $v_{rms}$ របស់ $O_2$</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> នៅ $27^\circ C$, គណនា (ក) $K_{av}$, (ខ) $K$ ក្នុង $1mol$, (គ) $v_{rms}$ នៃ $O_2$។</p>
+        <div class="math-block">
+            ក. $K_{av} = \frac{3}{2}k_BT = 1.5 \times 1.38\times 10^{-23} \times 300 = 6.21 \times 10^{-21}\text{ J}$<br>
+            ខ. $K = \frac{3}{2}nRT = 1.5 \times 1 \times 8.31 \times 300 = 3739.5 \approx 3740\text{ J}$<br>
+            គ. $v_{rms} = \sqrt{\frac{3 \times 8.31 \times 300}{0.032}} \approx 483.4\text{ m/s}$
+        </div>
+        <div class="final">ចម្លើយ៖ ក. $6.21\times 10^{-21}J$, ខ. $3740J$, គ. $483.4m/s$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី២៦៖ គណនាបរិមាណផ្សេងៗនៃឧស្ម័នតាមមាឌ</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> ធុង $V=0.224m^3$ ពេញឧស្ម័ននៅ $27^\circ C$។ រក (ក) n នៅ STP, (ខ) P ក្នុងធុង, (គ) $K_{av}$, (ឃ) K សរុប។ $V_o=22.4L/mol$។</p>
+        <div class="math-block">
+            ក. $n = \frac{V}{V_o} = \frac{0.224}{22.4 \times 10^{-3}} = 10\text{ mol}$<br>
+            ខ. $P = \frac{nRT}{V} = \frac{10 \times 8.31 \times 300}{0.224} = 111294.6\text{ Pa}$<br>
+            គ. $K_{av} = \frac{3}{2}k_BT = 621 \times 10^{-23}\text{ J}$<br>
+            ឃ. $K = \frac{3}{2}nRT = 1.5 \times 10 \times 8.31 \times 300 = 37395\text{ J}$
+        </div>
+        <div class="final">ចម្លើយ៖ ក. $10mol$, ខ. $111294.6Pa$, គ. $621\times 10^{-23}J$, ឃ. $37395J$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី២៧៖ សម្ពាធលំនឹងពេលបើកវ៉ានតភ្ជាប់ធុង</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> A($P_A=5\times 10^5, 300K$), B($P_B=1\times 10^5, 400K$)។ $V_B = 4V_A$។ រក $P'$។</p>
+        <div class="math-block">
+            តាមច្បាប់រក្សាម៉ូល $n_A + n_B = n_A' + n_B'$។ <br>
+            $\frac{P_A V_A}{RT_A} + \frac{P_B V_B}{RT_B} = \frac{P' V_A}{RT_A} + \frac{P' V_B}{RT_B}$<br>
+            $\frac{5\times 10^5 V_A}{300} + \frac{1\times 10^5 (4V_A)}{400} = \frac{P' V_A}{300} + \frac{P' (4V_A)}{400}$<br>
+            សម្រួល $V_A$ ចោល និងយកភាគបែងរួម 1200៖<br>
+            $4(5\times 10^5) + 3(4\times 10^5) = 4P' + 12P' \Rightarrow 20\times 10^5 + 12\times 10^5 = 16P' $<br>
+            $32\times 10^5 = 16P' \Rightarrow P' = 2\times 10^5\text{ Pa}$
+        </div>
+        <div class="final">ចម្លើយ៖ $P' = 2 \times 10^5 \text{ Pa}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី២៨៖ សម្ពាធ និងកម្ដៅស្រូបដោយឧស្ម័នក្រោមពីស្តុង</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> ពីស្តុង $A=0.08m^2, m=0.15kg$ ឡើងបាន $h=1.0cm$។ (ក) រក P ឧស្ម័ន ($P_{atm}=10^5Pa$), (ខ) រក Q។</p>
+        <div class="math-block">
+            ក. $P = P_{atm} + \frac{mg}{A} = 10^5 + \frac{0.15 \times 9.8}{0.08} = 100018.375\text{ Pa} \approx 100018.38\text{ Pa}$<br>
+            ខ. $\Delta V = A \cdot h = 0.08 \times 0.01 = 0.0008\text{ m}^3$។ កម្ដៅ $Q = \frac{5}{2}P\Delta V = 2.5 \times 100018.375 \times 0.0008 \approx 200\text{ J}$
+        </div>
+        <div class="final">ចម្លើយ៖ ក. $P = 100018.38Pa$, ខ. $Q = 200J$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី២៩៖ សម្ពាធនៃបាច់ម៉ូលេគុលបុកជញ្ជាំង</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> បាច់ $H_2$ បុកជញ្ជាំងមុំ $55^\circ$, ល្បឿន $1km/s$, ម៉ាស $m=3.3\times 10^{-24}g$, ផ្ទៃ $2cm^2$, អត្រា $10^{23}/s$។ រក P។ $\cos(55^\circ)=0.57$។</p>
+        <div class="math-block">
+            $v=10^3 m/s, m=3.3\times 10^{-27}kg, A=2\times 10^{-4}m^2$<br>
+            កម្លាំង $F = \frac{N}{t}(2mv \cos 55^\circ) = 10^{23}(2 \times 3.3\times 10^{-27} \times 10^3 \times 0.57) = 0.3762\text{ N}$<br>
+            សម្ពាធ $P = \frac{F}{A} = \frac{0.3762}{2\times 10^{-4}} = 1881\text{ Pa}$
+        </div>
+        <div class="final">ចម្លើយ៖ $P = 1881\text{ Pa}$</div>
+    </div></details>
+
+    <details><summary>លំហាត់ទី៣០៖ ការដកម៉ាសអុកស៊ីហ្សែនពីធុង</summary>
+    <div class="content">
+        <p><strong>ប្រធាន៖</strong> ធុងផ្ទុកអុកស៊ីហ្សែន 12kg សម្ពាធ 40atm។ រកម៉ាសត្រូវដកចេញ ឱ្យសម្ពាធធ្លាក់សល់ 25atm។</p>
+        <div class="math-block">
+            ដោយសារ V និង T ថេរ នោះម៉ាស សមាមាត្រនឹងសម្ពាធ $m \propto P$។<br>
+            $m_2 = m_1 \times \frac{P_2}{P_1} = 12 \times \frac{25}{40} = 7.5\text{ kg}$<br>
+            ម៉ាសត្រូវដកចេញ $\Delta m = m_1 - m_2 = 12 - 7.5 = 4.5\text{ kg}$
+        </div>
+        <div class="final">ចម្លើយ៖ $\Delta m = 4.5\text{ kg}$</div>
+    </div></details>
+
+</div>
+
+<script>
+    function toggleDetails(state) {
+        document.querySelectorAll('details').forEach(el => {
+            el.open = state;
+        });
+    }
+    
+    function preparePrint() {
+        toggleDetails(true);
+        setTimeout(() => {
+            window.print();
+        }, 500);
+    }
+</script>
+
+</body>
+</html>
